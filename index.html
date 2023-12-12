@@ -1,1 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>EU4 Battle Warscore Calculator</title>
+</head>
+<body>
+<div class="formstyle">
+    <form name="form1">
+        <label for="casualties">Casualties of Losing Side</label><br>
+        <input type="text" id="casualties" name="casualties"><br>
+        <label for="forceLimit">Combined Force Limit of Losing Side (all countries on that side of the war)</label><br>
+        <input type="text" id="forceLimit" name="forceLimit"><br>
+        <input type="checkbox" id="showSuperiority" name="showSuperiority">
+        <label for="showSuperiority">Show Superiority Wargoal?</label>
+    </form>
+</div>
+<div class="result">
+    <p><strong>Expected Warscore:</strong></p>
+    <p id="warscore">0</p>
+</div>
+<script>
+    const casualtiesInput = document.getElementById('casualties');
+    const forceLimitInput = document.getElementById('forceLimit');
+    const showSuperiorityInput = document.getElementById('showSuperiority');
+    const warscore = document.getElementById('warscore');
 
+    const inputHandler = function () {
+        let casualties = casualtiesInput.value;
+        let forceLimit = forceLimitInput.value;
+        let showSuperiority = showSuperiorityInput.checked;
+        console.log(casualties);
+        console.log(forceLimit);
+        console.log(showSuperiority);
+        if (!casualties || !forceLimit) {
+            warscore.innerHTML = '0';
+            return;
+        }
+        let result = Math.floor(casualties / 1000) * 20 / forceLimit;
+        result = Math.round(result * 100) / 100;
+        if (showSuperiority && result >= 0.2) result += 3;
+        warscore.innerHTML = result.toLocaleString(undefined, { maximumFractionDigits: 2 });
+    }
+
+    casualtiesInput.addEventListener('input', inputHandler);
+    forceLimitInput.addEventListener('input', inputHandler);
+    showSuperiorityInput.addEventListener('input', inputHandler);
+</script>
+</body>
+</html>
